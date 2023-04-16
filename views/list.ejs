@@ -1,0 +1,42 @@
+<%- include("header") -%>
+
+<div class="box" id="heading">
+  <h1><%= listTitle %></h1>
+</div>
+
+<div class="box">
+  <!-- Existing items -->
+  <% newListItems.forEach( (item) => { %>
+  <form action="/delete" method="post">
+    <div class="item">
+      <!-- name to allow us to tap into it inside the req.body.-->
+      <!-- {name: value} pair again -->
+      <input
+        type="checkbox"
+        name="checkbox"
+        value="<%= item._id %>"
+        onChange="this.form.submit()"
+      />
+      
+      <p><%= item.name %></p>
+    </div>
+    <!-- To delete on the right list -->
+    <input type="hidden" name="listName" value="<%= listTitle %>"></input>
+
+  </form>
+  <% }) %>
+
+  <!-- Adding new Item -->
+  <form class="item" action="/" method="post">
+    <input
+      type="text"
+      name="newItem"
+      placeholder="New Item"
+      autocomplete="off"
+    />
+    <!-- so to post to the right list -->
+    <button type="submit" name="list" value="<%= listTitle %>">+</button>
+  </form>
+</div>
+
+<%- include("footer") -%>
