@@ -8,6 +8,7 @@ const mongoose = require("mongoose");
 const _ = require("lodash");
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.set("view engine", "ejs");
 
@@ -20,10 +21,15 @@ app.use(express.static("public"));
 const uri = process.env.ATLAS_URI;
 main().catch((err) => console.log(err));
 
-async function main() {
-    await mongoose.connect(uri);
-    // use `await mongoose.connect('mongodb://user:password@127.0.0.1:27017/test');` if your database has auth enabled
-}
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(uri);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+};
 
 const itemsSchema = new mongoose.Schema({
     name: String,
@@ -153,6 +159,8 @@ app.get("/about", function (req, res) {
 
 app.get("/favicon.ico", (req, res) => res.status(204).end());
 
-app.listen(3000, function () {
-    console.log("Server started on port 3000");
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log(`Server started on port ${PORT}`);
+    });
 });
