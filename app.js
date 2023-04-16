@@ -19,7 +19,7 @@ app.use(express.static("public"));
  * Mongoose
  */
 const uri = process.env.ATLAS_URI;
-main().catch((err) => console.log(err));
+// main().catch((err) => console.log(err));
 
 const connectDB = async () => {
     try {
